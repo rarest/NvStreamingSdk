@@ -91,10 +91,10 @@ Pod::Spec.new do |s|
   #  Not including the public_header_files will make all headers public.
   #
 
-  s.source_files  = "include/**/*.h"
+  s.source_files  = "include/sdkcore/ios/*.h"
   # s.exclude_files = "Classes/Exclude"
 
-  # s.public_header_files = "include/**/*.h"
+  # s.public_header_files = "include/sdkcore/ios/*.h"
 
 
   # ――― Resources ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
@@ -122,7 +122,7 @@ Pod::Spec.new do |s|
 
   # s.library   = "iconv"
   s.libraries = "c++", "iconv", "z"
-  s.vendored_libraries = "lib/**/*.a"
+  s.vendored_libraries = "lib/ios/*.a"
 
   # ――― Project Settings ――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
   #
@@ -131,7 +131,7 @@ Pod::Spec.new do |s|
   #  you can include multiple dependencies to ensure it works.
 
   s.requires_arc = true
-  # s.xcconfig = {"ENABLE_BITCODE" => "NO"}
+  s.xcconfig = {"ENABLE_BITCODE" => "NO"}
   # s.xcconfig = { "HEADER_SEARCH_PATHS" => "$(SDKROOT)/usr/include/libxml2" }
   # s.dependency "JSONKit", "~> 1.4"
 
