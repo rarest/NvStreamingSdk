@@ -3,7 +3,7 @@ Pod::Spec.new do |s|
   s.version      = "1.3.2"
   s.summary      = "Meishe SDK"
   s.description  = <<-DESC
-                     This is MeiShe SDK
+                     This is Meishe SDK
                    DESC
 
   s.homepage     = "https://www.meishesdk.com"
