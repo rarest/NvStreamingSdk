@@ -18,6 +18,7 @@
 #import "NvsAssetPackageManager.h"
 #import "NvsAVFileInfo.h"
 #import "NvsVideoFrameRetriever.h"
+#import "NvsVideoFrameReceiver.h"
 
 /*!
  *  \brief
@@ -265,7 +266,7 @@ typedef enum {
 
 /*!
  *  \brief 创建时间线
- *  \param videoEditRes 视频编辑解析度(指定视频宽高及横纵比)。对于视频编辑解析度，在传入对应参数值时，目前要求传入的图像宽度值是4的倍数，高度值是2的倍数，并且视频编辑解析度里的imageWidth * imageHeight不能高于1920 * 1080像素。
+ *  \param videoEditRes 视频编辑解析度(指定视频宽高及像素比)。对于视频编辑解析度，在传入对应参数值时，目前要求传入的图像宽度值是4的倍数，高度值是2的倍数，并且视频编辑解析度里的imageWidth * imageHeight不能高于1920 * 1080像素。
  *  \param videoFps 视频帧率
  *  \param audioEditRes 音频编辑解析度(指定采样率、采样格式及声道数)。对于音频编辑解析度，传入的采样率值支持两种：44100与48000。
  *  \return 返回创建的时间线对象
@@ -319,6 +320,14 @@ typedef enum {
  *  \return 返回BOOL值。返回YES则连接成功，NO则连接失败。
  */
 - (BOOL)connectTimeline:(NvsTimeline *)timeline withLiveWindow:(NvsLiveWindow *)liveWindow;
+
+/*!
+ *  \brief 连接时间线和视频帧接收器
+ *  \param timeline 时间线
+ *  \param receiver 视频帧接收器
+ *  \return 返回BOOL值。返回YES则连接成功，NO则连接失败。
+ */
+- (BOOL)connectTimeline:(NvsTimeline *)timeline withVideoFrameReceiver:(NvsVideoFrameReceiver *)receiver;
 
 /*!
  *  \brief 定位某一时间戳的图像
@@ -637,7 +646,7 @@ typedef enum {
 - (void)removeCurrentCaptureScene;
 
 /*!
- *  \brief 启动录制采集设备信号
+ *  \brief 启动录制采集设备信号。请参见[视频录制方式] (\ref videoRecorderMode.md)
  *  \param outputFilePath 录制文件的路径。注意: 目前只支持输出.mov格式的文件
  *  \return 返回BOOL值。返回YES则启动录制成功，NO则启动失败。
  *  \sa stopRecording
@@ -647,7 +656,7 @@ typedef enum {
 /*!
  *  \brief 启动采集设备的录制，录制的内容包含所有的特效处理效果。注意：如果特效处理过于复杂
  *         可能会导致录制的视频丢帧，所以使用这个方法一定要慎重，要确保特效的处理对于当前
- *         手机是完全可以实时处理的。
+ *         手机是完全可以实时处理的。请参见[视频录制方式] (\ref videoRecorderMode.md)
  *  \param outputFilePath 录制文件的路径
  *  \return 返回BOOL值。返回YES则启动录制成功，NO则启动失败。
  *  \sa stopRecording

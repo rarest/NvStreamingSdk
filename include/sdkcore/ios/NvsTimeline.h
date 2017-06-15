@@ -154,6 +154,9 @@
 	\brief 根据时间线上的位置获得字幕
 	\param timelinePos 时间线上的位置(微秒)
 	\return 返回保存当前位置字幕的数组对象
+    <br>获取的字幕列表排序规则如下：
+    <br>1.添加时字幕入点不同，按入点的先后顺序排列；
+    <br>2.添加时字幕入点相同，按添加字幕的先后顺序排列。
     \sa addCaption:inPoint:duration:captionStylePackageId:
  */
 - (NSArray *)getCaptionsByTimelinePosition:(int64_t)timelinePos;
@@ -214,6 +217,9 @@
 	\brief 根据时间线上的位置获得动画贴纸
 	\param timelinePos 时间线上的位置(微秒)
 	\return 返回保存当前位置动画贴纸对象的数组对象
+    <br>获取的动画贴纸列表排序规则如下：
+    <br>1.添加时入点不同，按入点的先后顺序排列；
+    <br>2.添加时入点相同，按添加动画贴纸的先后顺序排列。
     \sa addAnimatedSticker:duration:animatedStickerPackageId:
  */
 - (NSArray *)getAnimatedStickersByTimelinePosition:(int64_t)timelinePos;

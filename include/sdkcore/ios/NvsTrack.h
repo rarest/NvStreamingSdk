@@ -65,7 +65,17 @@ typedef enum NvsTrackType {
     \warning 此接口会引发流媒体引擎状态跳转到引擎停止状态，具体情况请参见[引擎变化专题] (\ref EngineChange.md)。
     \sa  removeAllClips
  */
-- (BOOL)removeClip:(unsigned int)clipIndex keepSpace:(bool)keepSpace;
+- (BOOL)removeClip:(unsigned int)clipIndex keepSpace:(BOOL)keepSpace;
+
+/*!
+    \brief 移除指定的区间内的所有片段，如果片段只有部分与该区间重合则调整其时间线入点或者出点
+    \param startTimelinePos 区间的起始时间线位置(微秒)
+    \param endTimelinePos 区间的结束时间线位置(微秒)
+    \param keepSpace 区间内的片段移除后，是否保留该区间所占轨道上的空间。值为true则保留，false则不保留
+    \return 是否移除成功。返回true则移除成功，false则移除不成功
+    \warning 此接口会引发流媒体引擎状态跳转到引擎停止状态，具体情况请参见[引擎变化专题] (\ref EngineChange.md)。
+ */
+- (BOOL)removeRange:(int64_t)startTimelinePos endTimelinePos:(int64_t)endTimelinePos keepSpace:(BOOL)keepSpace;
 
 /*!
 	\brief 移动指定的片段

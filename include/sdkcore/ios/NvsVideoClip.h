@@ -32,6 +32,11 @@ typedef enum {
     NvsStreamingEngineImageClipMotionMode_ROI                  //!< \if ENGLISH \else 图片片段ROI(Region Of Interesting) \endif
 } NvsStreamingEngineImageClipMotionMode;
 
+typedef enum NvsSourceBackgroundMode {
+    NvsSourceBackgroundModeColorSolid = 0,   /*!< 纯色(0) */
+    NvsSourceBackgroundModeBlur,    /*!< 模糊*/
+} NvsSourceBackgroundMode;  /*!< 背景模式 */
+
 @class NvsVideoFx;
 
 /*!
@@ -73,6 +78,21 @@ typedef enum {
     \sa setPan:andScan:
  */
 - (void)getPan:(float *)pan andScan:(float *)scan;
+
+/*!
+    \brief 设置背景模式
+    \param sourceBackgroundMode 背景模式
+    \sa getSourceBackgroundMode:
+ */
+- (void)setSourceBackgroundMode:(NvsSourceBackgroundMode) sourceBackgroundMode;
+
+/*!
+    \brief 获取背景模式
+    \return 背景模式
+    \sa setSourceBackgroundMode: sourceBackgroundMode:
+ */
+- (NvsSourceBackgroundMode)getSourceBackgroundMode;
+
 
 /*!
     \brief 设置图片片段动态移动ROI
