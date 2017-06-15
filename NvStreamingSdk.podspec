@@ -40,7 +40,7 @@ Pod::Spec.new do |s|
   #
 
   # s.license      = "MIT (example)"
-  s.license      = { :type => "Apache License, Version 2.0", :file => "LICENSE" }
+  s.license      = { :type => "Apache License, Version 2.0", :file => "LICENSE.md" }
 
 
   # ――― Author Metadata  ――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
@@ -118,7 +118,7 @@ Pod::Spec.new do |s|
   #
 
   # s.framework  = "SomeFramework"
-  s.frameworks = "AssetsLibrary", "AudioToolBox", "AVFoundation", "CoreAudio", "CoreAudioKit", "CoreMedia", "MobileCoreServices", "Photos", "VideoToolbox"
+  s.frameworks = "AssetsLibrary", "AudioToolBox", "AVFoundation", "CoreAudio", "CoreAudioKit", "CoreMedia", "GLKit", "MobileCoreServices", "Photos", "VideoToolbox"
 
   # s.library   = "iconv"
   s.libraries = "c++", "iconv", "z"
