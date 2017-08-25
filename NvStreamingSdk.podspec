@@ -13,7 +13,7 @@ Pod::Spec.new do |s|
   s.source       = { :git => "https://github.com/rarest/NvStreamingSdk.git", :tag => s.version}
   s.source_files = "include/**/*.{h,m}"
 
-  s.frameworks   = "AssetsLibrary", "AudioToolBox", "AVFoundation", "CoreMotion",  "CoreAudio", "CoreAudioKit", "CoreMedia", "GLKit", "MobileCoreServices", "Photos", "VideoToolbox"
+  s.frameworks   = "Accelerate", "AssetsLibrary", "AudioToolBox", "AVFoundation", "CoreMotion",  "CoreAudio", "CoreAudioKit", "CoreMedia", "GLKit", "MobileCoreServices", "Photos", "VideoToolbox"
   s.libraries    = "c++", "iconv", "z"
 
   s.vendored_libraries = "lib/**/*.a"
