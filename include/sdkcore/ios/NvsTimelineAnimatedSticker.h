@@ -22,8 +22,17 @@
  */
 @interface NvsTimelineAnimatedSticker : NvsFx
 
+@property (readonly) BOOL isPanoramic;  //!< 是否为全景图动画贴纸贴纸 \since 1.6.0
+@property (nonatomic) BOOL clipAffinityEnabled; //!< 是否开启与clip的亲和关系 \since 1.7.1
 @property (readonly) int64_t inPoint; //!< \if ENGLISH \else 动画贴纸在时间线上显示的入点 \endif
 @property (readonly) int64_t outPoint; //!< \if ENGLISH \else 动画贴纸在时间线上显示的出点 \endif
+
+/*!
+    \brief 获取动画贴纸包ID
+    \return 返回获取动画贴纸包ID
+    \since 1.7.0
+ */
+- (NSString *)getAnimatedStickerPackageId;
 
 /*!
      \brief 改变动画贴纸在时间线上显示的入点
@@ -114,6 +123,7 @@
      \brief 设置平移
      \param translation 平移位置
      \sa getTransltion
+     \sa translateAnimatedSticker:
  */
 - (void)setTranslation:(CGPoint)translation;
 
@@ -125,6 +135,40 @@
 - (CGPoint)getTransltion;
 
 /*!
+     \brief 平移动画贴纸
+     \param translationOffset 动画贴纸平移的水平和垂直的偏移值
+     \since 1.8.1
+     \sa setTranslation:
+     \sa getTranslation
+ */
+- (void)translateAnimatedSticker:(CGPoint)translationOffset;
+
+/*!
+     \brief 缩放动画贴纸
+     \param scaleFactor 动画贴纸缩放的因子
+     \param anchor 动画贴纸缩放的锚点
+     \since 1.8.1
+ */
+- (void)scaleAnimatedSticker:(float)scaleFactor anchor:(CGPoint)anchor;
+
+/*!
+     \brief 旋转动画贴纸
+     \param angle 动画贴纸旋转的角度
+     \param anchor 动画贴纸旋转的锚点
+     \since 1.8.1
+     \sa rotateAnimatedSticker:
+ */
+- (void)rotateAnimatedSticker:(float)angle anchor:(CGPoint)anchor;
+
+/*!
+     \brief 以动画贴纸中心点为锚点旋转动画贴纸
+     \param angle 动画贴纸旋转的角度
+     \since 1.8.1
+     \sa rotateAnimatedSticker:anchor:
+ */
+- (void)rotateAnimatedSticker:(float)angle;
+
+/*!
      \brief 获取原始包围矩形框
      \return 返回NvsRect对象，表示获取的原始包围矩形框
  */
@@ -132,10 +176,59 @@
 
 /*!
     \brief 获取动画贴纸的原始包围矩形框变换后的顶点位置
-    \return 返回NSArray对象，里面的对象类型为NSValue，而实际包含的数据类型为CGPoint，包含四个顶点位置，依次分对应原始包围矩形框的左上，左下，右下，右上顶点
+    \return 返回NSArray对象，里面的对象类型为NSValue，而实际包含的数据类型为CGPoint，包含四个顶点位置，依次分别对应原始包围矩形框的左上，左下，右下，右上顶点
     \since 1.4.0
  */
 - (NSArray *)getBoundingRectangleVertices;
+
+/*!
+    \brief 对动画贴纸设置中心点的极角。只对全景图动画贴纸有效
+    \param centerPolarAngle 中心点的极角，单位为角度
+    \since 1.6.0
+ */
+- (void)setCenterPolarAngle:(float)centerPolarAngle;
+
+/*!
+    \brief 获取动画贴纸中心点的极角。只对全景图动画贴纸有效
+    \return 返回动画贴纸中心点的极角，单位为角度
+    \since 1.6.0
+ */
+- (float)getCenterPolarAngle;
+
+/*!
+    \brief 对动画贴纸设置中心点的方位角。只对全景图动画贴纸有效
+    \param centerAzimuthAngle 中心点的极角，单位为角度
+    \since 1.6.0
+ */
+- (void)setCenterAzimuthAngle:(float)centerAzimuthAngle;
+
+/*!
+    \brief 获取动画贴纸中心点的方位角。只对全景图动画贴纸有效
+    \return 返回动画贴纸中心点的方位角，单位为角度
+    \since 1.6.0
+ */
+- (float)getCenterAzimuthAngle;
+
+/*!
+    \brief 对动画贴纸设置极角的张角。只对全景图动画贴纸有效
+    \param polarAngleRange 极角的张角，单位为角度
+    \since 1.6.0
+ */
+- (void)setPolarAngleRange:(float)polarAngleRange;
+
+/*!
+    \brief 获取动画贴纸极角的张角。只对全景图动画贴纸有效
+    \return 返回动画贴纸极角的张角，单位为角度
+    \since 1.6.0
+ */
+- (float)getPolarAngleRange;
+
+/*!
+    \brief 获取动画贴纸与极角垂直的张角。只对全景图动画贴纸有效
+    \return 返回动画贴纸与极角垂直的张角，单位为角度
+    \since 1.7.0
+ */
+- (float)getOrthoAngleRange;
 
 @end
 

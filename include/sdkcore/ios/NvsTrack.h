@@ -38,6 +38,28 @@ typedef enum NvsTrackType {
 @property (readonly) unsigned int clipCount; //!< \if ENGLISH \else 轨道上的片段数量 \endif
 
 /*!
+ *  \brief 修改片段时间线上的入点
+ *  \param clipIndex 片段索引
+ *  \param newInPoint 新时间线上的入点
+ *  \return 返回实际可到达的时间线上的入点。注意：实际可达到的时间线上的入点范围在前一个片段的时间线出点与此片段的时间线出点的开区间内
+ *  \warning 此接口会引发流媒体引擎状态跳转到引擎停止状态，具体情况请参见[引擎变化专题] (\ref EngineChange.md)。
+ *  \since 1.6.0
+ *  \sa changeOutPoint:newOutPoint:
+ */
+- (int64_t)changeInPoint:(unsigned int)clipIndex newInPoint:(int64_t)newInPoint;
+
+/*!
+ *  \brief 修改片段时间线上的出点
+ *  \param clipIndex 片段索引
+ *  \param newOutPoint 新时间线上的出点
+ *  \return 返回实际可到达的时间线上的出点。注意：实际可达到的时间线上的出点范围在此片段的时间线入点与后一个片段的时间线入点的开区间内
+ *  \warning 此接口会引发流媒体引擎状态跳转到引擎停止状态，具体情况请参见[引擎变化专题] (\ref EngineChange.md)。
+ *  \since 1.6.0
+ *  \sa changeInPoint:newInPoint:
+ */
+- (int64_t)changeOutPoint:(unsigned int)clipIndex newOutPoint:(int64_t)newOutPoint;
+
+/*!
     \brief 分割指定的片段
     \param clipIndex 片段索引
     \param splitPoint 分割点

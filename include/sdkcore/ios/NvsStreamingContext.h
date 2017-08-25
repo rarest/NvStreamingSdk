@@ -10,7 +10,6 @@
 //   Birth Date:    Dec 29. 2016
 //   Author:        NewAuto video team
 //================================================================================
-
 #pragma once
 
 #import <Foundation/Foundation.h>
@@ -19,16 +18,29 @@
 #import "NvsAVFileInfo.h"
 #import "NvsVideoFrameRetriever.h"
 #import "NvsVideoFrameReceiver.h"
+#import "NvsCustomVideoFx.h"
+#import "NvsCommonDef.h"
+
+
+/*!
+ *  \brief
+ *  流媒体上下文创建标志
+ */
+typedef enum {
+    NvsStreamingContextFlag_Support4KEdit = 1   //!< \if ENGLISH \else 支持4K视频编辑 \endif
+} NvsStreamingContextFlag;
 
 /*!
  *  \brief
  *  生成视频文件的分辨率高度级别(创建时间线(createTimeline)时指定视频的宽高和横纵比，根据输出的视频分辨率高度算出生成视频文件的宽度)
  */
 typedef enum {
-    NvsCompileVideoResolutionGrade360 = 0, //!< \if ENGLISH \else 输出高度360像素 \endif
-    NvsCompileVideoResolutionGrade480,     //!< \if ENGLISH \else 输出高度480像素 \endif
-    NvsCompileVideoResolutionGrade720,     //!< \if ENGLISH \else 输出高度720像素 \endif
-    NvsCompileVideoResolutionGrade1080     //!< \if ENGLISH \else 输出高度1080像素 \endif
+    NvsCompileVideoResolutionGrade360 = 0,  //!< \if ENGLISH \else 输出高度360像素 \endif
+    NvsCompileVideoResolutionGrade480,      //!< \if ENGLISH \else 输出高度480像素 \endif
+    NvsCompileVideoResolutionGrade720,      //!< \if ENGLISH \else 输出高度720像素 \endif
+    NvsCompileVideoResolutionGrade1080,     //!< \if ENGLISH \else 输出高度1080像素 \endif
+    NvsCompileVideoResolutionGrade2160,     //!< \if ENGLISH \else 输出高度2160像素 \endif
+    NvsCompileVideoResolutionGradeCustom = 256  //!< 自定义生成视频高度
 } NvsCompileVideoResolutionGrade;
 
 /*!
@@ -74,8 +86,19 @@ typedef enum {
  */
 typedef enum
 {
-    NvsStreamingEngineSeekFlag_GrabCapturedVideoFrame = 1,      //!< \if ENGLISH \else 获取采集视频的帧内容（打开这个标志会降低性能，只有在必要的时候开启这个标志） \endif
+    NvsStreamingEngineCaptureFlag_GrabCapturedVideoFrame = 1,       //!< \if ENGLISH \else 获取采集视频的帧内容（打开这个标志会降低性能，只有在必要的时候开启这个标志） \endif
+    NvsStreamingEngineCaptureFlag_StrictPreviewVideoSize = 8,       //!< 限定预览视频尺寸只能是系统自带的预览视频尺寸
+    NvsStreamingEngineCaptureFlag_DontCaptureAudio = 16,            //!< 不采集音频
+    NvsStreamingEngineCaptureFlag_CaptureBuddyHostVideoFrame = 32   //!< 采集伴侣视频帧
 } NvsStreamingEngineCaptureFlag;
+
+/*!
+ *  \brief 录制标志
+ */
+typedef enum
+{
+    NvsStreamingEngineRecordingFlag_VideoIntraFrameOnly = 2,    //!< 录制仅包含I-Frame的视频文件
+} NvsStreamingEngineRecordingFlag;
 
 /*!
  *  \brief 引擎定位标识
@@ -85,6 +108,8 @@ typedef enum {
     NvsStreamingEngineSeekFlag_ShowAnimatedStickerPoster = 4,  //!< \if ENGLISH \else 整体展示动画贴纸效果 \endif
 } NvsStreamingEngineSeekFlag;
 
+#define NVS_COMPILE_BITRATE        @"bitrate"
+#define NVS_COMPILE_GOP_SIZE       @"gopsize"
 
 @class NvsCaptureDeviceCapability;
 @class NvsCaptureVideoFx;
@@ -154,6 +179,14 @@ typedef enum {
 - (void)didPlaybackPreloadingCompletion:(NvsTimeline *)timeline;
 
 /*!
+ *  \brief 时间线播放的当前位置
+ *  \param timeline 时间线
+ *  \param position 时间线播放的当前位置
+ *  \since 1.6.0
+ */
+- (void)didPlaybackTimelinePosition:(NvsTimeline *)timeline position:(int64_t)position;
+
+/*!
  *  \brief 播放停止
  *  \param timeline 时间线
  */
@@ -178,6 +211,15 @@ typedef enum {
  *  \sa didCompileFailed:
  */
 - (void)didCompileFinished:(NvsTimeline *)timeline;
+
+/*!
+ *  \brief 生成视频文件完成
+ *  \param timeline 时间线
+ *  \param isCanceled 中途取消导致生成完成。注：任何对引擎操作引起的停止生成均视为中途取消
+ *  \since 1.6.0
+ *  \sa didCompileFinished:
+ */
+- (void)didCompileCompleted:(NvsTimeline *)timeline isCanceled:(BOOL)isCanceled;
 
 /*!
  *  \brief 生成视频文件失败
@@ -220,6 +262,19 @@ typedef enum {
 
 @property (nonatomic, retain) id<NvsStreamingContextDelegate> delegate;
 @property (readonly) NvsAssetPackageManager *assetPackageManager;
+@property (nonatomic, assign) float compileVideoBitrateMultiplier;              //!< 生成视频码率倍乘系数 \since 1.5.0
+@property (nonatomic, assign) float recordVideoBitrateMultiplier;               //!< 录制视频码率倍乘系数 \since 1.5.0
+@property (nonatomic, assign) BOOL defaultCaptionFade;                          //!< 默认字幕是否为淡入淡出 \since 1.8.0
+@property (nonatomic, retain) NSMutableDictionary *compileConfigurations;       //!< 生成时间线配置 \since 1.8.0
+
+/*!
+ *  \brief 获取美摄SDK的版本信息
+ *  \param majorVersion 主版本号
+ *  \param minorVersion 次版本号
+ *  \param revisionNumber 修订版本号
+ *  \since 1.4.1
+ */
++ (void)getSdkVersion:(int *)majorVersion minorVersion:(int *)minorVersion revisionNumber:(int *)revisionNumber;
 
 /*!
  *  \brief 验证SDK授权文件
@@ -236,10 +291,25 @@ typedef enum {
 + (NvsStreamingContext *)sharedInstance;
 
 /*!
+ *  \brief 获取流媒体上下文的唯一实例。详细了解参见[4k视频编辑专题] (@ref support4kVideoEdit.md)
+ *  \param flags 标志字段，如无特殊需求请填写0。
+ *  \return 返回流媒体上下文的对象实例
+ *  \since 1.5.0
+ *  \sa destroyInstance
+ */
++ (NvsStreamingContext *)sharedInstanceWithFlags:(NvsStreamingContextFlag)flags;
+
+/*!
  *  \brief 销毁流媒体上下文实例。注意: 销毁之后无法再次创建及获取
  *  \sa sharedInstance
  */
 + (void)destroyInstance;
+
+/*!
+ *  \brief 从流媒体上下文中获取引擎所用的EAGLSharegroup对象
+ *  \since 1.5.0
+ */
+- (EAGLSharegroup *)getEAGLSharegroup;
 
 /*!
  *  \brief 获取文件的音视频信息
@@ -247,6 +317,14 @@ typedef enum {
  *  \return 返回音视频文件信息的对象
  */
 - (NvsAVFileInfo *)getAVFileInfo:(NSString *)avFilePath;
+
+/*!
+ *  \brief 探测视频文件的I帧间距
+ *  \param videoFilePath 视频文件的路径
+ *  \return 返回探测到的I帧间距，返回0表示探测失败
+ *  \since 1.6.0
+ */
+- (int)detectVideoFileKeyframeInterval:(NSString *)videoFilePath;
 
 /*!
  *  \brief 设置默认主题logo图片路径
@@ -266,7 +344,7 @@ typedef enum {
 
 /*!
  *  \brief 创建时间线
- *  \param videoEditRes 视频编辑解析度(指定视频宽高及像素比)。对于视频编辑解析度，在传入对应参数值时，目前要求传入的图像宽度值是4的倍数，高度值是2的倍数，并且视频编辑解析度里的imageWidth * imageHeight不能高于1920 * 1080像素。
+ *  \param videoEditRes 视频编辑解析度(指定视频宽高及像素比)。对于视频编辑解析度，在传入对应参数值时，目前要求传入的图像宽度值是4的倍数，高度值是2的倍数。注：如果创建NvsStreamingContext单例对象，支持4k视频编辑，则视频编辑解析度里的imageWidth * imageHeight不能高于3840*2160像素，否则视频编辑解析度里的imageWidth * imageHeight不能高于1920 * 1080像素。
  *  \param videoFps 视频帧率
  *  \param audioEditRes 音频编辑解析度(指定采样率、采样格式及声道数)。对于音频编辑解析度，传入的采样率值支持两种：44100与48000。
  *  \return 返回创建的时间线对象
@@ -312,6 +390,23 @@ typedef enum {
  *  \sa playbackTimeline:startTime:endTime:videoSizeMode:preload:flags:
  */
 - (BOOL)compileTimeline:(NvsTimeline *)timeline startTime:(int64_t)startTime endTime:(int64_t)endTime outputFilePath:(NSString *)outputFilePath videoResolutionGrade:(NvsCompileVideoResolutionGrade)videoResolutionGrade videoBitrateGrade:(NvsCompileVideoBitrateGrade)videoBitrateGrade flags:(int)flags;
+
+/*!
+ *  \brief 设置自定义的生成视频高度。
+ *         在生成时视频时，设置生成视频的码率级别为NvsCompileVideoResolutionGradeCustom
+ *         就可以使用自定义的生成视频高度。但是请注意，为了保证视频生成成功，美摄SDK会对高度进行适当的对齐，
+ *         因此最终生成的视频高度不一定就是这里设置的高度！
+ *  \param videoHeight 自定义的生成视频高度
+ *  \since 1.6.1
+ */
+- (void)setCustomCompileVideoHeight:(unsigned int)videoHeight;
+
+/*!
+ *  \brief 获取当前自定义的生成视频高度。
+ *  \return 返回当前自定义的生成视频高度
+ *  \since 1.6.1
+ */
+- (unsigned int)getCustomCompileVideoHeight;
 
 /*!
  *  \brief 连接时间线和实时预览窗口
@@ -441,6 +536,14 @@ typedef enum {
 - (BOOL)connectCapturePreviewWithLiveWindow:(NvsLiveWindow *)liveWindow;
 
 /*!
+ *  \brief 连接采集预览和视频帧接收器
+ *  \param receiver 视频帧接收器
+ *  \return 返回BOOL值。返回YES则连接成功，NO则连接失败。
+ *  \since 1.7.1
+ */
+- (BOOL)connectCapturePreviewWithVideoFrameReceiver:(NvsVideoFrameReceiver *)receiver;
+
+/*!
  *  \brief 启动采集设备预览
  *  \param captureDeviceIndex 采集设备索引
  *  \param videoResGrade 视频采集分辨率级别
@@ -468,6 +571,14 @@ typedef enum {
                                       flags:(int)flags
                                 aspectRatio:(const NvsRational *)aspectRatio
                       liveStreamingEndPoint:(NSString *)liveStreamingEndPoint;
+
+/*!
+ *  \brief 获取采集预览视频分辨率
+ *  \param catpureDeviceIndex 采集设备索引
+ *  \return 获取采集预览视频分辨率
+ *  \since 1.7.1
+ */
+- (NvsSize)getCapturePreviewVideoSize:(unsigned int)catpureDeviceIndex;
 
 /*!
  *  \brief 对采集设备的视频帧内容进行采样
@@ -573,6 +684,25 @@ typedef enum {
 - (NvsCaptureVideoFx *)insertPackagedCaptureVideoFx:(NSString *)videoFxPackageId withInsertPosition:(unsigned int)insertPosition;
 
 /*!
+ *  \brief 在片段上追加自定义采集视频特效
+ *  \param customVideoFxRender 用户实现的自定义视频特效渲染器接口
+ *  \return 返回追加的采集视频特效对象
+ *  \warning 此接口会引发流媒体引擎状态跳转到引擎停止状态，具体情况请参见[引擎变化专题] (\ref EngineChange.md)。
+ *  \since 1.7.0
+ */
+- (NvsCaptureVideoFx *)appendCustomCaptureVideoFx:(id<NvsCustomVideoFxRenderer>)customVideoFxRender;
+
+/*!
+ *  \brief 在片段上指定特效索引处插入自定义采集视频特效
+ *  \param customVideoFxRender 用户实现的自定义视频特效渲染器接口
+ *  \param insertPosition 插入位置
+ *  \return 返回插入的采集视频特效对象
+ *  \warning 此接口会引发流媒体引擎状态跳转到引擎停止状态，具体情况请参见[引擎变化专题] (\ref EngineChange.md)。
+ *  \since 1.7.0
+ */
+- (NvsCaptureVideoFx *)insertCustomCaptureVideoFx:(id<NvsCustomVideoFxRenderer>)customVideoFxRender withInsertPosition:(int)insertPosition;
+
+/*!
  *  \brief 给采集追加一个美颜视频特效
  *  \return 返回追加的美颜视频特效对象
  *  \sa insertBeautyCaptureVideoFx:
@@ -647,21 +777,45 @@ typedef enum {
 
 /*!
  *  \brief 启动录制采集设备信号。请参见[视频录制方式] (\ref videoRecorderMode.md)
- *  \param outputFilePath 录制文件的路径。注意: 目前只支持输出.mov格式的文件
+ *  \param outputFilePath 录制文件的路径。注意: 我们建议输出.mov格式的文件
  *  \return 返回BOOL值。返回YES则启动录制成功，NO则启动失败。
  *  \sa stopRecording
  */
 - (BOOL)startRecording:(NSString *)outputFilePath;
 
 /*!
- *  \brief 启动采集设备的录制，录制的内容包含所有的特效处理效果。注意：如果特效处理过于复杂
- *         可能会导致录制的视频丢帧，所以使用这个方法一定要慎重，要确保特效的处理对于当前
- *         手机是完全可以实时处理的。请参见[视频录制方式] (\ref videoRecorderMode.md)
- *  \param outputFilePath 录制文件的路径
+ *  \brief 启动录制采集设备信号。请参见[视频录制方式] (\ref videoRecorderMode.md)
+ *  \param outputFilePath 录制文件的路径。注意: 我们建议输出.mov格式的文件
+ *  \param flags 标志字段，如无特殊需求请填写0。请参见 [NvsStreamingEngineRecordingFlag] (@ref NvsStreamingEngineRecordingFlag)
+ *  \return 返回BOOL值。返回YES则启动录制成功，NO则启动失败。
+ *  \since 1.5.1
+ *  \sa stopRecording
+ */
+- (BOOL)startRecording:(NSString *)outputFilePath withFlags:(int)flags;
+
+/*!
+ *  \brief 启动采集设备的录制，录制的内容包含所有的特效处理效果。
+ *
+ * 注意：如果特效处理过于复杂可能会导致录制的视频丢帧，所以使用这个方法一定要慎重，要确保特效的处理对于当前
+ * 手机是完全可以实时处理的。请参见[视频录制方式] (\ref videoRecorderMode.md)
+ *  \param outputFilePath 录制文件的路径。我们建议输出.mov格式的文件
  *  \return 返回BOOL值。返回YES则启动录制成功，NO则启动失败。
  *  \sa stopRecording
  */
 - (BOOL)startRecordingWithFx:(NSString *)outputFilePath;
+
+/*!
+ *  \brief 启动采集设备的录制，录制的内容包含所有的特效处理效果。
+ *
+ * 注意：如果特效处理过于复杂可能会导致录制的视频丢帧，所以使用这个方法一定要慎重，要确保特效的处理对于当前
+ * 手机是完全可以实时处理的。请参见[视频录制方式] (\ref videoRecorderMode.md)
+ *  \param outputFilePath 录制文件的路径。我们建议输出.mov格式的文件
+ *  \param flags 标志字段，如无特殊需求请填写0。请参见 [NvsStreamingEngineRecordingFlag] (@ref NvsStreamingEngineRecordingFlag)
+ *  \return 返回BOOL值。返回YES则启动录制成功，NO则启动失败。
+ *  \since 1.5.1
+ *  \sa stopRecording
+ */
+- (BOOL)startRecordingWithFx:(NSString *)outputFilePath withFlags:(int)flags;
 
 /*!
  *  \brief 结束录制采集设备信号

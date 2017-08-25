@@ -25,11 +25,11 @@
  */
 @interface NvsAVFileInfo : NSObject
 
-@property (readonly) NvsAVFileType avFileType;       //!< \if ENGLISH brief member variable description \else 文件类型 \endif
-@property (readonly) int64_t duration;               //!< \if ENGLISH brief member variable description \else 时长(单位微秒) \endif
-@property (readonly) uint64_t dataRate;              //!< \if ENGLISH brief member variable description \else 数据速率\endif
-@property (readonly) unsigned int videoStreamCount;  //!< \if ENGLISH brief member variable description \else 视频流数目 \endif
-@property (readonly) unsigned int audioStreamCount;  //!< \if ENGLISH brief member variable description \else 音频流数目 \endif
+@property (readonly) NvsAVFileType avFileType;       //!< \if ENGLISH \else 文件类型 \endif
+@property (readonly) int64_t duration;               //!< \if ENGLISH \else 时长(单位微秒) \endif
+@property (readonly) uint64_t dataRate;              //!< \if ENGLISH \else 数据速率 \endif
+@property (readonly) unsigned int videoStreamCount;  //!< \if ENGLISH \else 视频流数目 \endif
+@property (readonly) unsigned int audioStreamCount;  //!< \if ENGLISH \else 音频流数目 \endif
 
 /*!
  *  \brief 通过视频流索引获取视频流时长

@@ -15,8 +15,6 @@
 
 #import "NvsFx.h"
 
-@class NvsFxDescription;
-
 /*!
  *  \brief 音频转场,音频片段间切换的特效
  *  
@@ -24,7 +22,5 @@
  * 
  */
 @interface NvsAudioTransition : NvsFx
-
-@property (readonly) NvsFxDescription *description;  //!< \if ENGLISH \else 音频转场特效描述 \endif
 
 @end

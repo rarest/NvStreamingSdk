@@ -15,6 +15,17 @@
 
 #import "NvsFx.h"
 
+
+/*!
+ *  \brief
+ *  采集视频特效类型
+ */
+typedef enum {
+    NvsCaptureVideoFxType_Builtin = 0,
+    NvsCaptureVideoFxType_Package,
+    NvsCaptureVideoFxType_Custom
+} NvsCaptureVideoFxType;
+
 /*!
  *  \brief 采集视频特效
 
@@ -23,6 +34,9 @@
  */
 @interface NvsCaptureVideoFx : NvsFx
 
+@property (readonly) NvsCaptureVideoFxType captureVideoFxType; //!< 采集视频特效类型
+@property (readonly,retain) NSString *bultinCaptureVideoFxName; //!< 内嵌采集视频特效名字。如果不是内嵌采集视频特效返回nil
+@property (readonly,retain) NSString *captureVideoFxPackageId; //!< 采集视频特效资源包ID。如果不是资源包采集视频特效返回nil
 @property (readonly) unsigned int index;   //!< \if ENGLISH brief member variable description \else 视频特效索引 \endif
 
 @end

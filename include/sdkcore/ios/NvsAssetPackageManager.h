@@ -43,21 +43,21 @@ typedef enum
  */
 typedef enum
 {
-    NvsAssetPackageManagerError_NoError = 0,          //!< \if ENGLISH brief enum description \else 安装成功 \endif
-    NvsAssetPackageManagerError_Name,                 //!< \if ENGLISH brief enum description \else 名称错误 \endif
-    NvsAssetPackageManagerError_AlreadyInstalled,     //!< \if ENGLISH brief enum description \else 已经安装 \endif
-    NvsAssetPackageManagerError_WorkingInProgress,    //!< \if ENGLISH brief enum description \else 安装或升级正在进行中 \endif
-    NvsAssetPackageManagerError_NotInstalled,         //!< \if ENGLISH brief enum description \else 尚未安装 \endif
-    NvsAssetPackageManagerError_ImproperStatus,       //!< \if ENGLISH brief enum description \else 不正确状态 \endif
-    NvsAssetPackageManagerError_Decompression,        //!< \if ENGLISH brief enum description \else 解压错误 \endif
-    NvsAssetPackageManagerError_InvalidPackage,       //!< \if ENGLISH brief enum description \else 无效包 \endif
-    NvsAssetPackageManagerError_AssetType,            //!< \if ENGLISH brief enum description \else 资源类型错误 \endif
-    NvsAssetPackageManagerError_Permission,           //!< \if ENGLISH brief enum description \else 许可错误 \endif
-    NvsAssetPackageManagerError_MetaContent,          //!< \if ENGLISH brief enum description \else 元内容错误 \endif
-    NvsAssetPackageManagerError_SdkVersion,           //!< \if ENGLISH brief enum description \else Sdk版本错误 \endif
-    NvsAssetPackageManagerError_UpgradeVersion,       //!< \if ENGLISH brief enum description \else 升级版本错误 \endif
-    NvsAssetPackageManagerError_IO,                   //!< \if ENGLISH brief enum description \else 输入输出错误 \endif
-    NvsAssetPackageManagerError_Resource              //!< \if ENGLISH brief enum description \else 资源错误 \endif
+    NvsAssetPackageManagerError_NoError = 0,          //!< \if ENGLISH \else 安装成功 \endif
+    NvsAssetPackageManagerError_Name,                 //!< \if ENGLISH \else 名称错误 \endif
+    NvsAssetPackageManagerError_AlreadyInstalled,     //!< \if ENGLISH \else 已经安装 \endif
+    NvsAssetPackageManagerError_WorkingInProgress,    //!< \if ENGLISH \else 安装或升级正在进行中 \endif
+    NvsAssetPackageManagerError_NotInstalled,         //!< \if ENGLISH \else 尚未安装 \endif
+    NvsAssetPackageManagerError_ImproperStatus,       //!< \if ENGLISH \else 不正确状态 \endif
+    NvsAssetPackageManagerError_Decompression,        //!< \if ENGLISH \else 解压错误 \endif
+    NvsAssetPackageManagerError_InvalidPackage,       //!< \if ENGLISH \else 无效包 \endif
+    NvsAssetPackageManagerError_AssetType,            //!< \if ENGLISH \else 资源类型错误 \endif
+    NvsAssetPackageManagerError_Permission,           //!< \if ENGLISH \else 许可错误 \endif
+    NvsAssetPackageManagerError_MetaContent,          //!< \if ENGLISH \else 元内容错误 \endif
+    NvsAssetPackageManagerError_SdkVersion,           //!< \if ENGLISH \else Sdk版本错误 \endif
+    NvsAssetPackageManagerError_UpgradeVersion,       //!< \if ENGLISH \else 升级版本错误 \endif
+    NvsAssetPackageManagerError_IO,                   //!< \if ENGLISH \else 输入输出错误 \endif
+    NvsAssetPackageManagerError_Resource              //!< \if ENGLISH \else 资源错误 \endif
 } NvsAssetPackageManagerError;
 
 

@@ -22,6 +22,8 @@
  */
 @interface NvsTimelineCaption : NvsFx
 
+@property (readonly) BOOL isPanoramic;  //!< 是否为全景图字幕 \since 1.6.0
+@property (nonatomic) BOOL clipAffinityEnabled; //!< 是否开启与clip的亲和关系 \since 1.7.1
 @property (readonly) int64_t inPoint;    //!< \if ENGLISH \else 字幕在时间线上显示的入点 \endif
 @property (readonly) int64_t outPoint;   //!< \if ENGLISH \else 字幕在时间线显示上的出点 \endif
 @property (readonly) NvsRoleInTheme roleInTheme; //!< \if ENGLISH \else 字幕在主题中的角色(通用、片头、片尾) \endif
@@ -236,9 +238,10 @@
 - (NSString *)getFontFilePath;
 
 /*!
-     \brief 字幕平移
-     \param translation 字幕平移的x,y值
+     \brief 设置字幕的平移量
+     \param translation 字幕平移的水平和垂直的绝对平移值
      \sa getCaptionTranslation
+     \sa translateCaption:
  */
 - (void)setCaptionTranslation:(CGPoint)translation;
 
@@ -250,10 +253,142 @@
 - (CGPoint)getCaptionTranslation;
 
 /*!
+     \brief 平移字幕
+     \param translationOffset 字幕平移的水平和垂直的偏移值
+     \since 1.7.0
+     \sa setCaptionTranslation:
+     \sa getCaptionTranslation
+ */
+- (void)translateCaption:(CGPoint)translationOffset;
+
+/*!
+     \brief 缩放字幕
+     \param scaleFactor 字幕缩放的因子
+     \param anchor 字幕缩放的锚点
+     \since 1.8.1
+ */
+- (void)scaleCaption:(float)scaleFactor anchor:(CGPoint)anchor;
+
+/*!
+     \brief 旋转字幕
+     \param angle 字幕旋转的角度
+     \param anchor 字幕旋转的锚点
+     \since 1.8.1
+     \sa rotateCaption:
+ */
+- (void)rotateCaption:(float)angle anchor:(CGPoint)anchor;
+
+/*!
+     \brief 以字幕中心点为锚点旋转字幕
+     \param angle 字幕旋转的角度
+     \since 1.8.1
+     \sa rotateCaption:anchor:
+ */
+- (void)rotateCaption:(float)angle;
+
+/*!
      \brief 获取字幕文本矩形框
      \return 返回NvsRect对象，表示获得的字幕文本矩形框
  */
 - (NvsRect)getTextBoundingRect;
+
+/*!
+    \brief 获取字幕的原始包围矩形框变换后的顶点位置
+    \return 返回NSArray对象，里面的对象类型为NSValue，而实际包含的数据类型为CGPoint，包含四个顶点位置，依次分别对应原始包围矩形框的左上，左下，右下，右上顶点
+    \since 1.8.1
+ */
+- (NSArray *)getBoundingRectangleVertices;
+
+/*!
+    \brief 对字幕设置中心点的极角。只对全景图字幕有效
+    \param centerPolarAngle 中心点的极角，单位为角度
+    \since 1.6.0
+ */
+- (void)setCenterPolarAngle:(float)centerPolarAngle;
+
+/*!
+    \brief 获取字幕中心点的极角。只对全景图字幕有效
+    \return 返回字幕中心点的极角，单位为角度
+    \since 1.6.0
+ */
+- (float)getCenterPolarAngle;
+
+/*!
+    \brief 对字幕设置中心点的方位角。只对全景图字幕有效
+    \param centerAzimuthAngle 中心点的极角，单位为角度
+    \since 1.6.0
+ */
+- (void)setCenterAzimuthAngle:(float)centerAzimuthAngle;
+
+/*!
+    \brief 获取字幕中心点的方位角。只对全景图字幕有效
+    \return 返回字幕中心点的方位角，单位为角度
+    \since 1.6.0
+ */
+- (float)getCenterAzimuthAngle;
+
+/*!
+    \brief 对字幕设置极角的张角。只对全景图字幕有效
+    \param polarAngleRange 极角的张角，单位为角度
+    \since 1.6.0
+ */
+- (void)setPolarAngleRange:(float)polarAngleRange;
+
+/*!
+    \brief 获取字幕极角的张角。只对全景图字幕有效
+    \return 返回字幕极角的张角，单位为角度
+    \since 1.6.0
+ */
+- (float)getPolarAngleRange;
+
+/*!
+    \brief 获取字幕与极角垂直的张角。只对全景图动画贴纸有效
+    \return 返字幕与极角垂直的张角，单位为角度
+    \since 1.7.0
+ */
+- (float)getOrthoAngleRange;
+
+/*!
+    \brief 对字幕设置水平缩放系数。只对全景图字幕有效
+    \param scaleX 水平缩放系数
+    \since 1.6.0
+ */
+- (void)setPanoramicScaleX:(float)scaleX;
+
+/*!
+    \brief 获取字幕水平缩放系数。只对全景图字幕有效
+    \return 返回字幕水平缩放系数
+    \since 1.6.0
+ */
+- (float)getPanoramicScaleX;
+
+/*!
+    \brief 对字幕设置垂直缩放系数。只对全景图字幕有效
+    \param scaleY 垂直缩放系数
+    \since 1.6.0
+ */
+- (void)setPanoramicScaleY:(float)scaleY;
+
+/*!
+    \brief 获取字幕垂直缩放系数。只对全景图字幕有效
+    \return 返回字幕垂直缩放系数
+    \since 1.6.0
+ */
+- (float)getPanoramicScaleY;
+
+/*!
+    \brief 对字幕设置旋转角度。只对全景图字幕有效
+    \param rotationAngle 旋转角度
+    \since 1.7.1
+ */
+- (void)setPanoramicRotation:(float)rotationAngle;
+
+/*!
+    \brief 获取字幕旋转角度。只对全景图字幕有效
+    \return 返回字幕旋转角度
+    \since 1.7.1
+ */
+- (float)getPanoramicRotation;
 
 @end
 

@@ -13,6 +13,7 @@
 #pragma once
 
 #import <Foundation/Foundation.h>
+
 /*!
  * \brief NvsObject类，继承自object-c里的NSObject类。
  * 
@@ -21,3 +22,4 @@
 @interface NvsObject : NSObject
 
 @end
+

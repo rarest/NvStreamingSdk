@@ -18,6 +18,8 @@
 #import "NvsObject.h"
 #import "NvsCommonDef.h"
 
+@class NvsFxDescription;
+
 /*!
  *  \brief 特效
  * 
@@ -25,6 +27,8 @@
  *  派生自NvsFx类的每种不同类型的特效，或通过片段实例，或时间线实例，或轨道实例来添加，移除和获取。同时，特效类中提供了不同的API接口来设置和获取特效参数类型。
  */
 @interface NvsFx : NvsObject
+
+@property (readonly) NvsFxDescription *description; //!< \if ENGLISH \else 特效描述 \endif
 
 /*!
    \brief setIntVal  设置特效参数整数值

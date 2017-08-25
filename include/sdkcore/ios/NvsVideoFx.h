@@ -14,7 +14,16 @@
 
 #import "NvsFx.h"
 
-@class NvsFxDescription;
+
+/*!
+ *  \brief
+ *  视频特效类型
+ */
+typedef enum {
+    NvsVideoFxType_Builtin = 0,
+    NvsVideoFxType_Package,
+    NvsVideoFxType_Custom
+} NvsVideoFxType;
 
 /*!
     \brief 视频特效
@@ -23,8 +32,10 @@
  */
 @interface NvsVideoFx : NvsFx
 
+@property (readonly) NvsVideoFxType videoFxType; //!< 视频特效类型
+@property (readonly,retain) NSString *bultinVideoFxName; //!< 内嵌视频特效名字。如果不是内嵌视频特效返回nil
+@property (readonly,retain) NSString *videoFxPackageId; //!< 视频特效资源包ID。如果不是资源包视频特效返回nil
 @property (readonly) unsigned int index;  //!< \if ENGLISH \else 视频特效索引 \endif
 
-@property (readonly) NvsFxDescription *description; //!< \if ENGLISH \else 视频特效描述 \endif
-
 @end
+

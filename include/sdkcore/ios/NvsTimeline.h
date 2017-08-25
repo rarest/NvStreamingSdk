@@ -15,12 +15,24 @@
 #import "NvsCommonDef.h"
 #import "NvsObject.h"
 #import "NvsLiveWindow.h"
+#import "NvsCustomVideoFx.h"
 
 
 @class NvsVideoTrack;
 @class NvsAudioTrack;
 @class NvsTimelineCaption;
 @class NvsTimelineAnimatedSticker;
+@class NvsTimelineVideoFx;
+
+/*!
+ *  \brief 水印位置标识
+ */
+typedef enum {
+    NvsTimelineWatermarkPosition_TopRight = 0,        //!< \if ENGLISH \else 水印显示在右上角 \endif
+    NvsTimelineWatermarkPosition_TopLeft = 1,         //!< \if ENGLISH \else 水印显示在左上角 \endif
+    NvsTimelineWatermarkPosition_BottomLeft = 2,      //!< \if ENGLISH \else 水印显示在左下角 \endif
+    NvsTimelineWatermarkPosition_BottomRight = 3      //!< \if ENGLISH \else 水印显示在右下角 \endif
+} NvsTimelineWatermarkPosition;
 
 /*!
      \brief 时间线，编辑场景的时间轴实体
@@ -163,7 +175,7 @@
 
 /*!
 	\brief 在时间线上添加字幕
-	\param captionText 添加的字幕
+    \param captionText 字幕的文字
 	\param inPoint 字幕在时间线上的起点
 	\param duration 字幕显示时长(微秒)
 	\param captionStylePackageId 字幕样式包Id
@@ -172,6 +184,18 @@
     \sa removeCaption:
  */
 - (NvsTimelineCaption *)addCaption:(NSString *)captionText inPoint:(int64_t)inPoint duration:(int64_t)duration captionStylePackageId:(NSString *)captionStylePackageId;
+
+/*!
+    \brief 在时间线上添加字幕
+    \param captionText 字幕的文字
+    \param inPoint 字幕在时间线上的入点
+    \param duration 字幕的显示时长(微秒)
+    \param captionStylePackageId 字幕样式包Id
+    \return 返回时间线字幕对象
+    \warning 此接口会引发流媒体引擎状态跳转到引擎停止状态，具体情况请参见[引擎变化专题] (\ref EngineChange.md)。
+    \sa removeCaption:
+ */
+- (NvsTimelineCaption *)addPanoramicCaption:(NSString *)captionText inPoint:(int64_t)inPoint duration:(int64_t)duration captionStylePackageId:(NSString *)captionStylePackageId;
 
 /*!
 	\brief 移除时间上的字幕
@@ -236,6 +260,18 @@
 - (NvsTimelineAnimatedSticker *)addAnimatedSticker:(int64_t)inPoint duration:(int64_t)duration animatedStickerPackageId:(NSString *)animatedStickerPackageId;
 
 /*!
+    \brief 在时间线上添加全景图动画贴纸
+    \param inPoint 动画贴纸在时间线上的起点(微秒)
+    \param duration 动画贴纸的显示时长(微秒)
+    \param animatedStickerPackageId 动画贴纸资源包ID
+    \return 返回时间线动画贴纸对象
+    \warning 此接口会引发流媒体引擎状态跳转到引擎停止状态，具体情况请参见[引擎变化专题] (\ref EngineChange.md)。
+    \since 1.6.0
+    \sa removeAnimatedSticker
+ */
+- (NvsTimelineAnimatedSticker *)addPanoramicAnimatedSticker:(int64_t)inPoint duration:(int64_t)duration animatedStickerPackageId:(NSString *)animatedStickerPackageId;
+
+/*!
 	\brief 移除时间上的动画贴纸
 	\param animatedSticker 要移除的动画贴纸对象
     \return 返回下一个时间线动画贴纸对象
@@ -243,6 +279,83 @@
     \sa addAnimatedSticker:duration:animatedStickerPackageId:
  */
 - (NvsTimelineAnimatedSticker *)removeAnimatedSticker:(NvsTimelineAnimatedSticker *)animatedSticker;
+
+/*!
+    \brief 获取时间线上第一个时间线视频特效
+    \return 返回获取的时间线视频特效对象
+ */
+- (NvsTimelineVideoFx *)getFirstTimelineVideoFx;
+
+/*!
+    \brief 获取时间线上最后一个时间线视频特效
+    \return 返回获取的时间线视频特效对象
+ */
+- (NvsTimelineVideoFx *)getLastTimelineVideoFx;
+
+/*!
+    \brief 获取时间线上某个时间线视频特效的前一个时间线视频特效
+    \param videoFx 时间线视频特效对象
+    \return 返回获取的时间线视频特效对象
+ */
+- (NvsTimelineVideoFx *)getPrevTimelineVideoFx:(NvsTimelineVideoFx *)videoFx;
+
+/*!
+    \brief 获取时间线上某个时间线视频特效的下一个时间线视频特效
+    \param videoFx 时间线视频特效对象
+    \return 返回获取的时间线视频特效对象
+ */
+- (NvsTimelineVideoFx *)getNextTimelineVideoFx:(NvsTimelineVideoFx *)videoFx;
+
+/*!
+    \brief 根据时间线上的位置获得时间线视频特效
+    \param timelinePos 时间线上的位置(微秒)
+    \return 返回当前位置时间线视频特效对象的数组
+    <br>获取的时间线视频特效数组排序规则如下：
+    <br>1.添加时入点不同，按入点的先后顺序排列；
+    <br>2.添加时入点相同，按添加时间线视频特效的先后顺序排列。
+ */
+- (NSArray *)getTimelineVideoFxByTimelinePosition:(int64_t)timelinePos;
+
+/*!
+    \brief 在时间线上添加内嵌的时间线视频特效
+    \param inPoint 时间线视频特效在时间线上的入点
+    \param duration 时间线视频特效的时长(微秒)
+    \param videoFxName 内嵌的时间线视频特效名字
+    \return 返回时间线视频特对象
+    \warning 此接口会引发流媒体引擎状态跳转到引擎停止状态，具体情况请参见[引擎变化专题] (\ref EngineChange.md)。
+ */
+- (NvsTimelineVideoFx *)addBuiltinTimelineVideoFx:(int64_t)inPoint duration:(int64_t)duration videoFxName:(NSString *)videoFxName;
+
+/*!
+    \brief 在时间线上添加资源包形式的时间线视频特效
+    \param inPoint 时间线视频特效在时间线上的入点
+    \param duration 时间线视频特效的时长(微秒)
+    \param videoFxPackageId 时间线视频特效资源包Id
+    \return 返回时间线视频特对象
+    \warning 此接口会引发流媒体引擎状态跳转到引擎停止状态，具体情况请参见[引擎变化专题] (\ref EngineChange.md)。
+ */
+- (NvsTimelineVideoFx *)addPackagedTimelineVideoFx:(int64_t)inPoint duration:(int64_t)duration videoFxPackageId:(NSString *)videoFxPackageId;
+
+/*!
+    \brief 在时间线上添加自定义时间线视频特效
+    \param inPoint 时间线视频特效在时间线上的入点
+    \param duration 时间线视频特效的时长(微秒)
+    \param customVideoFxRender 用户实现的自定义视频特效渲染器接口
+    \return 返回时间线视频对象
+    \warning 此接口会引发流媒体引擎状态跳转到引擎停止状态，具体情况请参见[引擎变化专题] (\ref EngineChange.md)。
+    \since 1.7.0
+ */
+- (NvsTimelineVideoFx *)addCustomTimelineVideoFx:(int64_t)inPoint
+                                        duration:(int64_t)duration
+                             customVideoFxRender:(id<NvsCustomVideoFxRenderer>)customVideoFxRender;
+
+/*!
+    \brief 移除时间线上的时间线视频特效
+    \param videoFx 要移除的时间线视频特效对象
+    \return 返回被删除的时间线视频特效的下一个时间线视频特效对象
+    \warning 此接口会引发流媒体引擎状态跳转到引擎停止状态，具体情况请参见[引擎变化专题] (\ref EngineChange.md)。
+ */
+- (NvsTimelineVideoFx *)removeTimelineVideoFx:(NvsTimelineVideoFx *)videoFx;
 
 /*!
     \brief 获得当前主题的id
@@ -304,6 +417,26 @@
  */
 - (void)getThemeMusicVolumeGain:(float *)leftVolumeGain rightVolumeGain:(float *)rightVolumeGain;
 
+/*!
+    \brief 添加水印
+    \param watermarkFilePath 水印文件的路径，须为PNG或JPG文件
+    \param displayWidth 水印在timeline中显示的宽度，为0则使用图片文件的宽度
+    \param displayHeight 水印在timeline中显示的高度，为0则使用图片文件的高度
+    \param opacity 水印的不透明度
+    \param position 水印的位置，请参见 [NvsWatermarkPosition] (@ref NvsWatermarkPosition)
+    \param marginX 水印在X方向的边距
+    \param marginY 水印在Y方向的边距
+    \warning 此接口会引发流媒体引擎状态跳转到引擎停止状态，具体情况请参见[引擎变化专题] (\ref EngineChange.md)。
+    \sa deleteWatermark:
+ */
+- (bool)addWatermark:(NSString*)watermarkFilePath displayWidth:(int)displayWidth displayHeight:(int)displayHeight opacity:(float)opacity position:(int)position marginX:(int)marginX marginY:(int)marginY;
+
+/*!
+    \brief 删除已添加的水印
+    \warning 此接口会引发流媒体引擎状态跳转到引擎停止状态，具体情况请参见[引擎变化专题] (\ref EngineChange.md)。
+    \sa addWatermark:displayRatio:opacity:position:
+*/
+- (void)deleteWatermark;
 
 @end
 

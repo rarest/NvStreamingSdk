@@ -16,7 +16,15 @@
 
 #import "NvsFx.h"
 
-@class NvsFxDescription;
+
+/*!
+ *  \brief
+ *  采集视频特效类型
+ */
+typedef enum {
+    NvsVideoTransitionType_Builtin = 0,
+    NvsVideoTransitionType_Package,
+} NvsVideoTransitionType;
 
 /*!
     \brief 视频转场，片段间切换的特效
@@ -28,6 +36,8 @@
  */
 @interface NvsVideoTransition : NvsFx
 
-@property (readonly) NvsFxDescription *description;  //!< \if ENGLISH \else 视频转场描述 \endif
+@property (readonly) NvsVideoTransitionType videoTransitionType; //!< 视频转场类型
+@property (readonly,retain) NSString *bultinVideoTransitionName; //!< 内嵌视频转场名字。如果不是内嵌视频转场返回nil
+@property (readonly,retain) NSString *videoTransitionPackageId; //!< 视频转场资源包ID。如果不是资源包视频转场返回nil
 
 @end

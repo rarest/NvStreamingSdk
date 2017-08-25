@@ -16,6 +16,8 @@
 
 #import "NvsCommonDef.h"
 #import "NvsClip.h"
+#import "NvsCustomVideoFx.h"
+
 
 typedef enum NvsVideoClipType {
     NvsVideoClipType_AV = 0,   /*!< 音视频(0) */
@@ -60,6 +62,28 @@ typedef enum NvsSourceBackgroundMode {
 @property (readonly) NvsRect startROI; //!< \if ENGLISH \else 图片片段起始ROI \since 1.1.0 \endif
 
 @property (readonly) NvsRect endROI;   //!< \if ENGLISH \else 图片片段终止ROI \since 1.1.0 \endif
+
+
+/*!
+    \brief 设置片段是否倒放
+
+    注意：使用片段倒放请确保当前视频文件为全I帧视频，否则倒放播放效率极低完全无法忍受！可以利用美摄SDK录制标志
+    STREAMING_ENGINE_RECORDING_FLAG_VIDEO_INTRA_FRAME_ONLY来产生出全I帧视频文件。如果从别的地方
+    导入的文件无法保证为全I帧视频又想用倒放功能则可以使用美摄的转码SDK直接将原始视频转码为一个倒放的文件再使用。
+    注意：请确保需要倒放的视频文件位于APP的沙盒中
+    \param playInReverse 片段是否倒放
+    \since 1.5.1
+    \sa getPlayInReverse
+ */
+- (void)setPlayInReverse:(BOOL)playInReverse;
+
+/*!
+    \brief 获取片段是否倒放
+    \return 返回片段是否倒放
+    \since 1.5.1
+    \sa setPlayInReverse
+ */
+- (BOOL)getPlayInReverse;
 
 /*!
     \brief 设置摇摄和扫描
@@ -106,7 +130,7 @@ typedef enum NvsSourceBackgroundMode {
 - (void)setImageMotionROI:(NvsRect *)startROI endROI:(NvsRect *)endROI;
 
 /*!
-    \brief 在片段末尾追加内嵌式特效
+    \brief 在片段上追加内嵌式特效
     \param fxName 特效名称。获取视频特效名称，请参见[getAllBuiltinVideoFxNames()] (@ref NvsStreamingContext::getAllBuiltinVideoFxNames)或[内建特效名称列表] (\ref FxNameList.md)
     \return 返回追加的视频特效对象
     \warning 此接口会引发流媒体引擎状态跳转到引擎停止状态，具体情况请参见[引擎变化专题] (\ref EngineChange.md)。
@@ -129,7 +153,7 @@ typedef enum NvsSourceBackgroundMode {
 - (NvsVideoFx *)insertBuiltinFx:(NSString *)fxName fxIndex:(unsigned int)fxIndex;
 
 /*!
-    \brief 在片段末尾追加资源包特效
+    \brief 在片段上追加资源包特效
     \param fxPackageId 特效资源包ID
     \return 返回追加的视频特效对象
     \warning 此接口会引发流媒体引擎状态跳转到引擎停止状态，具体情况请参见[引擎变化专题] (\ref EngineChange.md)。
@@ -152,7 +176,26 @@ typedef enum NvsSourceBackgroundMode {
 - (NvsVideoFx *)insertPackagedFx:(NSString *)fxPackageId fxIndex:(unsigned int)fxIndex;
 
 /*!
-    \brief 在片段末尾追加美颜特效
+    \brief 在片段上追加自定义视频特效
+    \param customVideoFxRender 用户实现的自定义视频特效渲染器接口
+    \return 返回追加的视频特效对象
+    \warning 此接口会引发流媒体引擎状态跳转到引擎停止状态，具体情况请参见[引擎变化专题] (\ref EngineChange.md)。
+    \since 1.7.0
+ */
+- (NvsVideoFx *)appendCustomFx:(id<NvsCustomVideoFxRenderer>)customVideoFxRender;
+
+/*!
+    \brief 在片段上指定特效索引处插入自定义视频特效
+    \param customVideoFxRender 用户实现的自定义视频特效渲染器接口
+    \param fxIndex 插入特效索引
+    \return 返回插入的视频特效对象
+    \warning 此接口会引发流媒体引擎状态跳转到引擎停止状态，具体情况请参见[引擎变化专题] (\ref EngineChange.md)。
+    \since 1.7.0
+ */
+- (NvsVideoFx *)insertCustomFx:(id<NvsCustomVideoFxRenderer>)customVideoFxRender fxIndex:(unsigned int)fxIndex;
+
+/*!
+    \brief 在片段上追加美颜特效
     \return 返回追加的视频特效对象
     \warning 此接口会引发流媒体引擎状态跳转到引擎停止状态，具体情况请参见[引擎变化专题] (\ref EngineChange.md)。
     \sa insertBeautyFx:

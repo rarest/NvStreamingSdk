@@ -15,7 +15,6 @@
 
 #import "NvsFx.h"
 
-@class NvsFxDescription;
 /*!
  *  \brief 音频特效
  *  
@@ -25,7 +24,5 @@
 @interface NvsAudioFx : NvsFx
 
 @property (readonly) unsigned int index;              //!< \if ENGLISH brief member variable description \else 音频特效索引 \endif
-
-@property (readonly) NvsFxDescription *description;   //!< \if ENGLISH brief member variable description \else 音频特效描述 \endif
 
 @end
