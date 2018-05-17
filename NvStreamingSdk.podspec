@@ -13,7 +13,7 @@ Pod::Spec.new do |s|
   s.source       = { :git => "https://github.com/rarest/NvStreamingSdk.git", :tag => s.version}
   s.source_files = "lib/**/NvStreamingSdkCore.framework/Headers/*.h"
   s.public_header_files = "lib/**/NvStreamingSdkCore.framework/Headers/*.h"
-  s.vendored_libraries = "lib/**/NvStreamingSdkCore.framework"
+  s.ios.vendored_frameworks = "lib/**/NvStreamingSdkCore.framework"
   s.requires_arc       = true
   s.xcconfig = {"ENABLE_BITCODE" => "NO"}
 end
