@@ -1,3 +1,3 @@
 # NvStreamingSdk
 Using latest Meishe Sdk by cocoapods:
-pod 'NvStreamingSdk', '~> 1.9.0'
+pod 'NvStreamingSdk', '~> 2.0.1'
