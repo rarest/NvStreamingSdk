@@ -8,7 +8,7 @@ Pod::Spec.new do |s|
 
   s.homepage     = "https://www.meishesdk.com"
   s.license      = { :type => "Meishe SDK License", :file => "LICENSE.md" }
-  s.author       = { "rarest" => "wich@163.com" }
+  s.author       = { "huang_yi" => "huang_yi@cdv.com" }
   s.platform     = :ios, "8.0"
   s.source       = { :git => "https://github.com/rarest/NvStreamingSdk.git", :tag => s.version}
   s.source_files = "include/**/*.{h,m}"
