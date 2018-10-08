@@ -39,6 +39,12 @@ typedef enum NvsSourceBackgroundMode {
     NvsSourceBackgroundModeBlur,    /*!< 模糊*/
 } NvsSourceBackgroundMode;  /*!< 背景模式 */
 
+typedef enum NvsClipWrapMode {
+    NvsClipWrapMode_Repeat_LastFrame = 0,
+    NvsClipWrapMode_Repeat_FirstFrame = 1,
+    NvsClipWrapMode_Repeat = 2
+} NvsClipWrapMode;
+
 typedef enum NvsExtraVideoRotation {
     NvsExtraVideoRotation_0 = 0,
     NvsExtraVideoRotation_90 = 1,
@@ -151,14 +157,32 @@ NVS_EXPORT @interface NvsVideoClip : NvsClip
 - (void)setImageMotionROI:(NvsRect *)startROI endROI:(NvsRect *)endROI;
 
 /*!
+    \brief 设置片段循环模式
+    \param wrapMode 循环模式
+    \since 2.2.3
+    \sa getClipWrapMode
+ */
+
+- (void)setClipWrapMode:(NvsClipWrapMode)wrapMode;
+
+/*!
+    \brief 获取视频循环模式
+    \return 返回循环模式
+    \since 2.2.3
+    \sa setClipWrapMode
+ */
+
+- (NvsClipWrapMode)getClipWrapMode;
+
+/*!
     \brief 在片段上追加内嵌式特效
     \param fxName 特效名称。获取视频特效名称，请参见[getAllBuiltinVideoFxNames()] (@ref NvsStreamingContext::getAllBuiltinVideoFxNames)或[内建特效名称列表] (\ref FxNameList.md)
     \return 返回追加的视频特效对象
-    \warning 此接口会引发流媒体引擎状态跳转到引擎停止状态，具体情况请参见[引擎变化专题] (\ref EngineChange.md)。
     \sa insertBuiltinFx:fxIndex:
     \sa appendBeautyFx
     \sa appendPackagedFx:
  */
+
 - (NvsVideoFx *)appendBuiltinFx:(NSString *)fxName;
 
 /*!
@@ -166,7 +190,6 @@ NVS_EXPORT @interface NvsVideoClip : NvsClip
     \param fxName 特效名称。获取视频特效名称，请参见[getAllBuiltinVideoFxNames()] (@ref NvsStreamingContext::getAllBuiltinVideoFxNames)或[内建特效名称列表] (\ref FxNameList.md)
     \param fxIndex 插入特效索引
     \return 返回插入的视频特效对象
-    \warning 此接口会引发流媒体引擎状态跳转到引擎停止状态，具体情况请参见[引擎变化专题] (\ref EngineChange.md)。
     \sa appendBuiltinFx:
     \sa insertPackagedFx:fxIndex:
     \sa insertBeautyFx:
@@ -177,7 +200,6 @@ NVS_EXPORT @interface NvsVideoClip : NvsClip
     \brief 在片段上追加资源包特效
     \param fxPackageId 特效资源包ID
     \return 返回追加的视频特效对象
-    \warning 此接口会引发流媒体引擎状态跳转到引擎停止状态，具体情况请参见[引擎变化专题] (\ref EngineChange.md)。
     \sa appendBeautyFx
     \sa appendBuiltinFx:
     \sa insertPackagedFx:fxIndex:
@@ -189,7 +211,6 @@ NVS_EXPORT @interface NvsVideoClip : NvsClip
     \param fxPackageId 包裹特效Id
     \param fxIndex 插入特效索引
     \return 返回插入的视频特效对象
-    \warning 此接口会引发流媒体引擎状态跳转到引擎停止状态，具体情况请参见[引擎变化专题] (\ref EngineChange.md)。
     \sa insertBeautyFx:
     \sa appendPackagedFx:
     \sa insertBuiltinFx:fxIndex:
@@ -200,7 +221,6 @@ NVS_EXPORT @interface NvsVideoClip : NvsClip
     \brief 在片段上追加自定义视频特效
     \param customVideoFxRender 用户实现的自定义视频特效渲染器接口
     \return 返回追加的视频特效对象
-    \warning 此接口会引发流媒体引擎状态跳转到引擎停止状态，具体情况请参见[引擎变化专题] (\ref EngineChange.md)。
     \since 1.7.0
  */
 - (NvsVideoFx *)appendCustomFx:(id<NvsCustomVideoFxRenderer>)customVideoFxRender;
@@ -210,7 +230,6 @@ NVS_EXPORT @interface NvsVideoClip : NvsClip
     \param customVideoFxRender 用户实现的自定义视频特效渲染器接口
     \param fxIndex 插入特效索引
     \return 返回插入的视频特效对象
-    \warning 此接口会引发流媒体引擎状态跳转到引擎停止状态，具体情况请参见[引擎变化专题] (\ref EngineChange.md)。
     \since 1.7.0
  */
 - (NvsVideoFx *)insertCustomFx:(id<NvsCustomVideoFxRenderer>)customVideoFxRender fxIndex:(unsigned int)fxIndex;
@@ -218,7 +237,6 @@ NVS_EXPORT @interface NvsVideoClip : NvsClip
 /*!
     \brief 在片段上追加美颜特效
     \return 返回追加的视频特效对象
-    \warning 此接口会引发流媒体引擎状态跳转到引擎停止状态，具体情况请参见[引擎变化专题] (\ref EngineChange.md)。
     \sa insertBeautyFx:
     \sa appendPackagedFx:
     \sa appendBuiltinFx:
@@ -229,7 +247,6 @@ NVS_EXPORT @interface NvsVideoClip : NvsClip
     \brief 在片段上指定特效索引处插入美颜特效
     \param fxIndex 插入特效索引
     \return 返回插入的视频特效对象
-    \warning 此接口会引发流媒体引擎状态跳转到引擎停止状态，具体情况请参见[引擎变化专题] (\ref EngineChange.md)。
     \sa appendBeautyFx
     \sa insertPackagedFx:fxIndex:
     \sa insertBuiltinFx:fxIndex:
@@ -240,7 +257,6 @@ NVS_EXPORT @interface NvsVideoClip : NvsClip
     \brief 移除特效
     \param fxIndex 特效索引
     \return 判断是否移除成功。返回true则移除成功，false则失败。
-    \warning 此接口会引发流媒体引擎状态跳转到引擎停止状态，具体情况请参见[引擎变化专题] (\ref EngineChange.md)。
     \sa removeAllFx
  */
 - (BOOL)removeFx:(unsigned int)fxIndex;
@@ -248,7 +264,6 @@ NVS_EXPORT @interface NvsVideoClip : NvsClip
 /*!
     \brief 移除所有特效
     \return 判断是否移除成功。返回true则移除成功，false则失败。
-    \warning 此接口会引发流媒体引擎状态跳转到引擎停止状态，具体情况请参见[引擎变化专题] (\ref EngineChange.md)。
     \sa removeFx:
  */
 - (BOOL)removeAllFx;

@@ -358,7 +358,6 @@ NVS_EXPORT @interface NvsTimeline : NvsObject
     \param duration 时间线视频特效的时长（单位微秒）
     \param videoFxName 内嵌的时间线视频特效名字
     \return 返回时间线视频特对象
-    \warning 此接口会引发流媒体引擎状态跳转到引擎停止状态，具体情况请参见[引擎变化专题] (\ref EngineChange.md)。
  */
 - (NvsTimelineVideoFx *)addBuiltinTimelineVideoFx:(int64_t)inPoint duration:(int64_t)duration videoFxName:(NSString *)videoFxName;
 
@@ -368,7 +367,6 @@ NVS_EXPORT @interface NvsTimeline : NvsObject
     \param duration 时间线视频特效的时长（单位微秒）
     \param videoFxPackageId 时间线视频特效资源包Id
     \return 返回时间线视频特对象
-    \warning 此接口会引发流媒体引擎状态跳转到引擎停止状态，具体情况请参见[引擎变化专题] (\ref EngineChange.md)。
  */
 - (NvsTimelineVideoFx *)addPackagedTimelineVideoFx:(int64_t)inPoint duration:(int64_t)duration videoFxPackageId:(NSString *)videoFxPackageId;
 
@@ -378,7 +376,6 @@ NVS_EXPORT @interface NvsTimeline : NvsObject
     \param duration 时间线视频特效的时长（单位微秒）
     \param customVideoFxRender 用户实现的自定义视频特效渲染器接口
     \return 返回时间线视频对象
-    \warning 此接口会引发流媒体引擎状态跳转到引擎停止状态，具体情况请参见[引擎变化专题] (\ref EngineChange.md)。
     \since 1.7.0
  */
 - (NvsTimelineVideoFx *)addCustomTimelineVideoFx:(int64_t)inPoint
@@ -389,7 +386,6 @@ NVS_EXPORT @interface NvsTimeline : NvsObject
     \brief 移除时间线上的时间线视频特效
     \param videoFx 要移除的时间线视频特效对象
     \return 返回被删除的时间线视频特效的下一个时间线视频特效对象
-    \warning 此接口会引发流媒体引擎状态跳转到引擎停止状态，具体情况请参见[引擎变化专题] (\ref EngineChange.md)。
  */
 - (NvsTimelineVideoFx *)removeTimelineVideoFx:(NvsTimelineVideoFx *)videoFx;
 

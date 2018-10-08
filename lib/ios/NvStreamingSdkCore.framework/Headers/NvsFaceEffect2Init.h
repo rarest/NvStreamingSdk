@@ -24,6 +24,8 @@ NVS_EXPORT @interface NvsFaceEffect2Init : NSObject
 
 +(bool) setupModeData:(NSString*) modeFile;
 
++(bool) setMaxFaces:(int) maxFaceCount;
+
 +(void) finish;
 
 @end

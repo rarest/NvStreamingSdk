@@ -92,7 +92,7 @@ struct NvsCustomVideoFxRenderContext {
 /*!
  *  \brief 自定义视频特效的辅助方法接口
  */
-@interface NvsCustomVideoFxRenderHelper : NSObject
+NVS_EXPORT @interface NvsCustomVideoFxRenderHelper : NSObject
 
 /*!
  *  \brief 自定义视频特效的用户调用此方法来申请一个RGBA纹理
@@ -108,6 +108,13 @@ struct NvsCustomVideoFxRenderContext {
  *  \param texId 要释放的纹理ID
  */
 - (void)reclaimTexture:(int)texId;
+
+/*!
+ *  \brief 自定义视频特效的用户调用此方法来上传一个Host bufffer 到 OpenGL的纹理上
+ *  \param hostBuffer 要上传到host buffer
+ *  \param tId 要上传到纹理ID
+ */
+- (BOOL)uploadHostBufferToOpenGLTexture:(NvsVideoFrameInfo*)hostBuffer textureId:(int)tId;
 
 @end
 

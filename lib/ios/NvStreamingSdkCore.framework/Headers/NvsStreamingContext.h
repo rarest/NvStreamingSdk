@@ -29,7 +29,8 @@
  */
 typedef enum {
     NvsStreamingContextFlag_Support4KEdit = 1,  //!< \if ENGLISH \else 支持4K视频编辑 \endif
-    NvsStreamingContextFlag_Support8KEdit = 4   //!< 支持8K编辑(仅图片)
+    NvsStreamingContextFlag_Support8KEdit = 4,  //!< 支持8K编辑(仅图片)
+    NvsStreamingContextFlag_AsyncEngineState = 16   //!< 引擎状态切换使用异步方式以便减少主线程的卡顿
 } NvsStreamingContextFlag;
 
 /*!
@@ -93,7 +94,8 @@ typedef enum
     NvsStreamingEngineCaptureFlag_DontCaptureAudio = 16,            //!< 不采集音频
     NvsStreamingEngineCaptureFlag_CaptureBuddyHostVideoFrame = 32,  //!< 采集伴侣视频帧
     NvsStreamingEngineCaptureFlag_IgnoreScreenOrientation = 64,     //!< 不使用屏幕方向来确定采集画面的旋转角度 \since 1.15.2
-    NvsStreamingEngineCaptureFlag_AutoVideoStabilization = 128      //!< 启用视频防抖动 \since 1.16.1
+    NvsStreamingEngineCaptureFlag_AutoVideoStabilization = 128,      //!< 启用视频防抖动 \since 1.16.1
+    NvsStreamingEngineCaptureFlag_FaceActionWithParticle = 256      //!< 使用脸部动作控制粒子特效 \since 2.1.0
 } NvsStreamingEngineCaptureFlag;
 
 
@@ -126,6 +128,8 @@ typedef enum
 typedef enum
 {
     NvsStreamingEngineRecordingFlag_VideoIntraFrameOnly = 2,    //!< 录制仅包含I-Frame的视频文件
+    NvsStreamingEngineRecordingFlag_OnlyRecordVideo = 16,       //!< 仅录制视频流
+    NvsStreamingEngineRecordingFlag_IgnoreVideoRotation = 32    //!< 录制时不根据设备的手持方向对视频做旋转。注意：必须用startRecordingWithFx进行录制才有效果
 } NvsStreamingEngineRecordingFlag;
 
 /*!
@@ -143,6 +147,14 @@ typedef enum {
     NvsStreamingEnginePlaybackFlag_LowPipelineSize = 8         //!< 降低引擎在播放时内部的流水线尺寸
 } NvsStreamingEnginePlaybackFlag;
 
+/*!
+ *  \brief 停止引擎标志
+ */
+typedef enum {
+    NvsStreamingEngineStopFlag_Async = 2    //!< 异步停止引擎，避免阻塞主线程
+} NvsStreamingEngineStopFlag;
+
+
 /*! \anchor RECORD_CONFIGURATIONS */
 /*! @name 录制视频配置 */
 //!@{
@@ -157,6 +169,8 @@ typedef enum {
 #define NVS_COMPILE_GOP_SIZE        @"gopsize"              //!< 生成视频GOP SIZE
 #define NVS_COMPILE_AUDIO_BITRATE   @"audio bitrate"        //!< 生成音频码率
 #define NVS_COMPILE_LOSSLESS_AUDIO  @"lossless audio"       //!< 是否生成无损音频
+#define NVS_COMPILE_OPTIMIZE_FOR_NETWORK_USE  @"optimize-for-network-use"       //!<是否前置索引表
+#define NVS_COMPILE_VIDEO_ENCODEC_NAME  @"video encoder name"       //!<指定视频压缩格式，目前支持hevc（h.265）
 //!@}
 
 @class NvsCaptureDeviceCapability;
@@ -351,6 +365,7 @@ NVS_EXPORT @interface NvsStreamingContext : NSObject
  *              [config setValue:[NSNumber numberWithInteger:10000000] forKey:NVS_COMPILE_BITRATE]; // 10M bps
  *              [config setValue:[NSNumber numberWithInteger:256000] forKey:NVS_COMPILE_AUDIO_BITRATE]; // 设置音频码率为256Kbps
  *              [config setValue:[NSNumber numberWithBool:YES] forKey:NVS_COMPILE_LOSSLESS_AUDIO]; // 设置生成无损音频
+ *              [config setValue:[NSNumber numberWithBool:YES] forKey:NVS_COMPILE_OPTIMIZE_FOR_NETWORK_USE]; // 设置索引表前置
  *              _streamingContext.compileConfigurations = config;
  *         取消设置并恢复默认方式例如：[_streamingContext.compileConfigurations setValue:nil forKey:NVS_COMPILE_GOP_SIZE];
  *  \since 1.8.0
@@ -616,6 +631,13 @@ NVS_EXPORT @interface NvsStreamingContext : NSObject
  *  \brief 停止引擎
  */
 - (void)stop;
+
+/*!
+ *  \brief 停止引擎
+ *  \param flags 停止引擎标志。请参见 [NvsStreamingEngineStopFlag] (@ref NvsStreamingEngineStopFlag)
+ *  \since 2.3.0
+ */
+- (void)stop:(int)flags;
 
 /*!
  *  \brief 清除缓存资源
@@ -1158,7 +1180,7 @@ setCustomCompileVideoHeight()接口来自定义高度，然后调用生成接口
  *
  *  定义采集设备的相关属性，包含自动聚焦，自动曝光，缩放等
  */
-@interface NvsCaptureDeviceCapability : NSObject
+NVS_EXPORT @interface NvsCaptureDeviceCapability : NSObject
 
 @property (readonly) BOOL supportAutoFocus;      //!< \if ENGLISH \else 是否支持自动聚焦 \endif
 @property (readonly) BOOL supportAutoExposure;   //!< \if ENGLISH \else 是否支持自动曝光 \endif

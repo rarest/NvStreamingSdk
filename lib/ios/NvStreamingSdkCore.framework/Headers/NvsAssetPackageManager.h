@@ -12,6 +12,8 @@
 //================================================================================
 #pragma once
 
+#import "NvsObject.h"
+
 #import <Foundation/Foundation.h>
 
 /*!
@@ -60,6 +62,19 @@ typedef enum
     NvsAssetPackageManagerError_Resource              //!< \if ENGLISH \else 资源错误 \endif
 } NvsAssetPackageManagerError;
 
+/*!
+ *  \brief 资源包支持的横纵比
+ */
+typedef enum {
+    NvsAssetPackageAspectRatio_16v9 = 1,
+    NvsAssetPackageAspectRatio_1v1 = 2,
+    NvsAssetPackageAspectRatio_9v16 = 4,
+    NvsAssetPackageAspectRatio_4v3 = 8,
+    NvsAssetPackageAspectRatio_3v4 = 16,
+    NvsAssetPackageAspectRatio_18v9 = 32,
+    NvsAssetPackageAspectRatio_9v18 = 64
+} NvsAssetPackageAspectRatio;
+
 
 @protocol NvsAssetPackageManagerDelegate <NSObject>
 @optional
@@ -92,7 +107,7 @@ typedef enum
  *   在SDK开发过中，资源包管理器统一对需要的各种特技资源包包括字幕，主题，动画贴纸等进行相应的安装，升级，卸载等操作。在安装，升级，卸载时，出现差错都会有相应的错误提示类型，以便快速定位和解决错误。
  *  \warning NvsAssetPackageManager类中，所有public API都在UI线程使用！！！
  */
-@interface NvsAssetPackageManager : NSObject
+NVS_EXPORT @interface NvsAssetPackageManager : NSObject
 
 @property (nonatomic, weak) id<NvsAssetPackageManagerDelegate> delegate;
 
@@ -191,6 +206,14 @@ typedef enum
  *  \return 返回资源包的版本号。如果该资源包未安装，则返回1。
  */
 - (int)getAssetPackageVersion:(NSString *)assetPackageId type:(NvsAssetPackageType)type;
+
+/*!
+ *  \brief 获取资源包的所支持的横纵比
+ *  \param assetPackageId 待查询状态资源包ID
+ *  \param type 待查询状态资源包的类型
+ *  \return 返回资源包的所支持的横纵比，这个值是若干横纵比(NvsAssetPackageAspectRatio_XXX)的按位或的结果
+ */
+- (int)getAssetPackageSupportedAspectRatio:(NSString *)assetPackageId type:(NvsAssetPackageType)type;
 
 /*!
  *  \brief 获取某个类型的资源包列表

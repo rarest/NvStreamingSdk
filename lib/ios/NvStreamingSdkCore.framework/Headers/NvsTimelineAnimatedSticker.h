@@ -23,10 +23,12 @@
  */
 NVS_EXPORT @interface NvsTimelineAnimatedSticker : NvsFx
 
+@property (readonly) BOOL hasAudio; //!< 是否含有音频 \since 2.0.3
 @property (readonly) BOOL isPanoramic;  //!< 是否为全景图动画贴纸贴纸 \since 1.6.0
 @property (nonatomic) BOOL clipAffinityEnabled; //!< 是否开启与clip的亲和关系 \since 1.7.1
 @property (readonly) int64_t inPoint; //!< 动画贴纸在时间线上显示的入点（单位微秒）
 @property (readonly) int64_t outPoint; //!< 动画贴纸在时间线上显示的出点（单位微秒）
+@property (readonly) int64_t defaultDuration; //!< 动画贴纸默认长度（单位微秒） \since 2.1.0
 
 /*!
     \brief 获取动画贴纸包ID
@@ -244,6 +246,24 @@ NVS_EXPORT @interface NvsTimelineAnimatedSticker : NvsFx
      \sa setZValue:
  */
 - (float)getZValue;
+
+/*!
+    \brief 设置贴纸音量
+    \param leftVolumeGain 左声道音量增益
+    \param rightVolumeGain 右声道音量增益
+    \sa getVolumeGain:rightVolumeGain:
+    \since 2.0.3
+*/
+- (void)setVolumeGain:(float)leftVolumeGain rightVolumeGain:(float)rightVolumeGain;
+
+/*!
+    \brief 获取贴纸音量
+    \param leftVolumeGain 返回左声道音量增益
+    \param rightVolumeGain 返回右声道音量增益
+    \sa setVolumeGain:rightVolumeGain:
+    \since 2.0.3
+ */
+- (void)getVolumeGain:(float *)leftVolumeGain rightVolumeGain:(float *)rightVolumeGain;
 
 @end
 

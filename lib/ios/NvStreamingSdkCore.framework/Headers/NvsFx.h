@@ -20,6 +20,9 @@
 
 @class NvsFxDescription;
 @class NvsParticleSystemContext;
+@class NvsARFaceContext;
+@class NvsPaintingEffectContext;
+
 
 /*!
  *  \brief 特效
@@ -185,11 +188,38 @@ NVS_EXPORT @interface NvsFx : NvsObject
 - (NSString *)getMenuVal:(NSString *)fxParam;
 
 /*!
+   \brief 设置滤镜的强度
+   \param intensity 滤镜强度值，取值范围一般为[0,1]，为0则滤镜无效果，为1则为默认效果
+   \since 2.0.2
+*/
+-(void)setFilterIntensity:(float)intensity;
+
+/*!
+   \brief 获得滤镜的强度
+   \return 返回滤镜的强度值
+   \since 2.0.2
+*/
+-(float)getFilterIntensity;
+
+/*!
    \brief getParticleSystemContext  获得粒子特效上下文句柄
 
    \return 返回指向粒子特效上下文句柄指针
 */
 - (NvsParticleSystemContext *)getParticleSystemContext;
 
+/*!
+   \brief getARFaceContext  获得人脸特效上下文句柄
+
+   \return 返回指向人脸特效上下文句柄指针
+*/
+- (NvsARFaceContext *)getARFaceContext;
+
+/*!
+   \brief getPaintingEffectContext  获得手绘特效上下文句柄
+
+   \return 返回指向手绘特效上下文句柄指针
+*/
+- (NvsPaintingEffectContext *)getPaintingEffectContext;
 
 @end

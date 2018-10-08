@@ -23,26 +23,86 @@
 
 
 /*!
- *  \brief 粒子特效上下文
+ *  \brief 内置人脸扭区上下文
  * 
- *  粒子特效上下文类可视作调整粒子效果的入口。可以调整粒子发射器的位置，大小，发射速率等
+ *  内置人脸扭区上下文包含一些对人脸特征的扭区接口
  */
 NVS_EXPORT @interface NvsAREffectContext : NSObject
 
 - (void)setInternalContext:(void *)internalContext;
 
 /*!
- *  \brief 设置大眼进度
- *  \param ratio 进度:最大值1,最小值:0,默认值0
+ *  \brief 设置大眼程度
+ *  \param ratio 缩放程度:最大值1,最小值:-1,默认值0
  */
-- (void)setEyeEnlageRatio:(float)ratio;
+- (void)setEyeEnlargeRatio:(float)ratio;
 
 
 /*!
- *  \brief 设置瘦脸进度
- *  \param ratio 进度:最大值1,最小值:-1,默认值0
+ *  \brief 设置瘦脸程度
+ *  \param ratio 程度:最大值1,最小值:-1,默认值0
  */
 - (void)setShrinkFaceRatio:(float)ratio;
+
+/*!
+ *  \brief 设置额头高度
+ *  \param ratio 高度:最大值1,最小值:-1,默认值0
+ */
+- (void)setForeheadWarpRatio:(float)ratio;
+
+/*!
+ *  \brief 设置发际线高度
+ *  \param ratio 高度:最大值1,最小值:-1,默认值0
+ */
+- (void)setHairlineWarpRatio:(float)ratio;
+
+/*!
+ *  \brief 设置颧骨宽度
+ *  \param ratio 宽度:最大值1,最小值:-1,默认值0
+ */
+- (void)setMalarWarpRatio:(float)ratio;
+
+/*!
+ *  \brief 设置下颌大小
+ *  \param ratio 大小:最大值1,最小值:-1,默认值0
+ */
+- (void)setJawWarpRatio:(float)ratio;
+
+/*!
+ *  \brief 设置下巴大小
+ *  \param ratio 大小:最大值1,最小值:-1,默认值0
+ */
+- (void)setChinWarpRatio:(float)ratio;
+
+/*!
+ *  \brief 设置眉毛长度
+ *  \param ratio 长度:最大值1,最小值:-1,默认值0
+ */
+- (void)setEyebrowWarpRatio:(float)ratio;
+
+/*!
+ *  \brief 设置眼间距
+ *  \param ratio 间距:最大值1,最小值:-1,默认值0
+ */
+- (void)setEyeDistanceWarpRatio:(float)ratio;
+
+/*!
+ *  \brief 设置鼻梁长度
+ *  \param ratio 长度:最大值1,最小值:-1,默认值0
+ */
+- (void)setNoseLengthWarpRatio:(float)ratio;
+
+/*!
+ *  \brief 设置鼻子宽度
+ *  \param ratio 宽度:最大值1,最小值:-1,默认值0
+ */
+- (void)setNoseWidthWarpRatio:(float)ratio;
+
+/*!
+ *  \brief 设置嘴部宽度
+ *  \param ratio 宽度:最大值1,最小值:-1,默认值0
+ */
+- (void)setMouthWidthWarpRatio:(float)ratio;
 
 @end
 

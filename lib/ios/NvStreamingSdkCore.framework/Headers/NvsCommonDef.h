@@ -153,4 +153,7 @@ typedef struct{
     int64_t frameTimestamp;
     bool isRec601; //!< \if ENGLISH \else 是否是BT.601 \endif
     bool isFullRangeYUV;
+
+    int displayRotation; //!< \if ENGLISH \else 显示当前图像需要旋转的角度 \endif
+    bool flipHorizontally; //!< \if ENGLISH \else 显示当前图像需要不需要水平翻转 \endif
 } NvsVideoFrameInfo;
