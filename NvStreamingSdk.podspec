@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "NvStreamingSdk"
-  s.version      = "2.3.0"
+  s.version      = "2.3.1"
   s.summary      = "Meishe SDK"
   s.description  = <<-DESC
                      This is Meishe SDK
